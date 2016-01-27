@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RestController
 public class BellController {
     
-    @RequestMapping("/")
+    @RequestMapping("/ringbell")
     public String index() {
         return "Greetings from Spring Boot!";
     }
