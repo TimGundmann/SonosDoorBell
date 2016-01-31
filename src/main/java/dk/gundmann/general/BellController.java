@@ -11,8 +11,8 @@ public class BellController {
     
     @RequestMapping("/ringbell")
     public String index() {
-        System.out.println("Call to sonos bell at " + DateTimeFormatter.ofPattern("yyyy/MM/dd HHS:mm:ss z").format(ZonedDateTime.now()));    	
-        return "Sonos bell is ringing!";
+        System.out.println("Call to sonos bell at " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z").format(ZonedDateTime.now()));    	
+        return "Sonos bell is rining!";
     }
     
 }
