@@ -12,7 +12,7 @@ import org.tensin.sonos.control.ZonePlayer;
 @Component
 public class Loader {
 
-	public static final int WAIT_SECONDS = 7200;
+	public static final int WAIT_SECONDS = 100;
 
 	private static final long ONE_HOUR = 3600000;
 	
