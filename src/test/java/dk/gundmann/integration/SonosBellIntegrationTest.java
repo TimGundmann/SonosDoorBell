@@ -1,5 +1,7 @@
 package dk.gundmann.integration;
 
+import java.util.Collection;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -11,7 +13,7 @@ import dk.gundmann.bell.sonos.Loader;
 import dk.gundmann.bell.sonos.PlaySound;
 import dk.gundmann.general.ApplicationConfiguration;
 
-@Ignore
+//@Ignore
 public class SonosBellIntegrationTest {
 
 	private Sonos sonos = new Sonos(10000);
@@ -39,9 +41,12 @@ public class SonosBellIntegrationTest {
 		// given
 
 		// when
-		playSound.play(player);
+		Collection<ZonePlayer> players = loader.getPlayers();
 
 		// then
+		for (ZonePlayer player : players) {
+			System.out.println(player);
+		}
 		
 	}
 	

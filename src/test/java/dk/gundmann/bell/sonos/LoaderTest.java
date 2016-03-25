@@ -2,6 +2,7 @@ package dk.gundmann.bell.sonos;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;

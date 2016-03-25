@@ -3,6 +3,7 @@ package dk.gundmann.bell.sonos;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -41,9 +42,18 @@ public class Loader {
 		if (players == null) {
 			initPlayers();
 		}
-		return players;
+		return filterGroups(players);
 	}	
 	
+	private Collection<ZonePlayer> filterGroups(Collection<ZonePlayer> players) {
+		return players.stream()
+				.filter(e -> {
+					String groupName = sonos.getZoneGroupTopology(e).getZoneGroupAttributes().execute().currentZoneGroupName();
+					return groupName != null && groupName.contains(sonos.getZoneName(e));
+				})
+				.collect(Collectors.toList());
+	}
+
 	private void initPlayers() {
 		try {
 			players = resolveAndWaitForPlaysers();

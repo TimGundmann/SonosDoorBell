@@ -7,6 +7,7 @@ public class VolumAdjuster {
 
 	private Sonos sonos;
 	private ZonePlayer player;
+	private int volume;
 
 	public VolumAdjuster(Sonos sonos, ZonePlayer player) {
 		this.sonos = sonos;
@@ -14,19 +15,24 @@ public class VolumAdjuster {
 	}
 
 	public void adjustToBellLevel() {
-		adjust(sonos.volume(player) - 20);
+		saveCurrentvolume();
+		adjust(30);
 	}
 
 	public void resume() {
-		adjust(20 - sonos.volume(player));
+		adjust(volume);
+	}
+
+	private void saveCurrentvolume() {
+		volume = sonos.volume(player);
 	}
 
 	private void adjust(int volume) {
 		try {
-			sonos.adjustVolume(player, volume);
+			sonos.setVolume(player, volume);
 		} catch (Exception e1) {
 			try {
-				sonos.adjustVolume(player, volume);
+				sonos.setVolume(player, volume);
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
