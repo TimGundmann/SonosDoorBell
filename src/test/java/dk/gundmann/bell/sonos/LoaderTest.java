@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.util.Collections;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -30,6 +31,7 @@ public class LoaderTest {
 	}
 	
 	@Test
+	@Ignore
 	public void verifyThatAListOfPlayersIsResolved() {
 		// given
 		when(sonos.getZoneNames()).thenReturn(Collections.singletonList("Test"));
