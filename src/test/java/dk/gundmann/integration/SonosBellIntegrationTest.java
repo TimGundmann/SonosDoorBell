@@ -13,7 +13,7 @@ import dk.gundmann.bell.sonos.Loader;
 import dk.gundmann.bell.sonos.PlaySound;
 import dk.gundmann.general.ApplicationConfiguration;
 
-//@Ignore
+@Ignore
 public class SonosBellIntegrationTest {
 
 	private Sonos sonos = new Sonos(10000);
