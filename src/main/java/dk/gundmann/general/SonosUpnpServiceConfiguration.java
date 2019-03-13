@@ -5,7 +5,7 @@ import org.fourthline.cling.transport.impl.apache.StreamClientConfigurationImpl;
 import org.fourthline.cling.transport.impl.apache.StreamClientImpl;
 import org.fourthline.cling.transport.spi.StreamClient;
 
-public class BellUpnpServiceConfiguration extends DefaultUpnpServiceConfiguration {
+public class SonosUpnpServiceConfiguration extends DefaultUpnpServiceConfiguration {
 
     @Override
     public StreamClient<?> createStreamClient() {

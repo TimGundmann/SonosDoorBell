@@ -10,20 +10,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.tensin.sonos.commander.Sonos;
 
-import dk.gundmann.bell.sonos.Loader;
-import dk.gundmann.bell.sonos.PlaySound;
-import dk.gundmann.bell.sonos.SonosBell;
+import dk.gundmann.sonos.Loader;
+import dk.gundmann.sonos.PlaySound;
 
 @Configuration
 @EnableScheduling
 public class ApplicationConfiguration {
 
-	public static final String BELL_SOUND = "cifs://192.168.1.100/music/Trumpet.mp3";
-
 	private Sonos sonos = new Sonos(20000) {
 		@Override
 		protected UpnpService createUpnpService(RegistryListener listener) {
-			return new UpnpServiceImpl(new BellUpnpServiceConfiguration(), listener);
+			return new UpnpServiceImpl(new SonosUpnpServiceConfiguration(), listener);
 		};
 	};
 
@@ -34,12 +31,12 @@ public class ApplicationConfiguration {
 	
 	@Bean
 	public PlaySound usePlaySounde() {
-		return new PlaySound(sonos, BELL_SOUND);
+		return new PlaySound(sonos);
 	}
 	
 	@Bean 
-	public SonosBell useSonosBell() {
-		return new SonosBell();
+	public dk.gundmann.sonos.Sonos useSonosBell() {
+		return new dk.gundmann.sonos.Sonos();
 	}
 	
 	@PreDestroy

@@ -1,5 +1,6 @@
-package dk.gundmann.bell.sonos;
+package dk.gundmann.sonos;
 
+import org.tensin.sonos.SonosException;
 import org.tensin.sonos.commander.Sonos;
 import org.tensin.sonos.control.ZonePlayer;
 
@@ -33,8 +34,10 @@ public class VolumAdjuster {
 		} catch (Exception e1) {
 			try {
 				sonos.setVolume(player, volume);
-			} catch (Exception e2) {
-				e2.printStackTrace();
+			} catch (SonosException e2) {
+				if (!"501".equals(e2.getMessage())) {
+					e2.printStackTrace();
+				}
 			}
 		}
 	}

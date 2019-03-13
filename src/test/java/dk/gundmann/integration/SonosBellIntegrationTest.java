@@ -9,9 +9,9 @@ import org.junit.Test;
 import org.tensin.sonos.commander.Sonos;
 import org.tensin.sonos.control.ZonePlayer;
 
-import dk.gundmann.bell.sonos.Loader;
-import dk.gundmann.bell.sonos.PlaySound;
 import dk.gundmann.general.ApplicationConfiguration;
+import dk.gundmann.sonos.Loader;
+import dk.gundmann.sonos.PlaySound;
 
 @Ignore
 public class SonosBellIntegrationTest {
@@ -20,7 +20,7 @@ public class SonosBellIntegrationTest {
 	
 	private Loader loader = new Loader(sonos);
 	
-	private PlaySound playSound = new PlaySound(sonos, ApplicationConfiguration.BELL_SOUND);
+	private PlaySound playSound = new PlaySound(sonos);
 	
 	private ZonePlayer player;
 	
