@@ -14,8 +14,10 @@ import ca.sukhsingh.actions.on.google.ApiAiApp;
 import ca.sukhsingh.actions.on.google.request.Request;
 import ca.sukhsingh.actions.on.google.response.Response;
 import dk.gundmann.sonos.Sonos;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
+@Slf4j
 public class SonosController {
 	
 	private ApiAiApp app = new ApiAiApp();
@@ -27,7 +29,7 @@ public class SonosController {
 
     @PostMapping("/ringbell")
     public String ringbell() {
-        System.out.println("Call to sonos bell at " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z").format(ZonedDateTime.now()));
+        log.info("Call to sonos bell at " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z").format(ZonedDateTime.now()));
         try {
         	sonos.play(BELL_SOUND);
         } catch (Exception e) {
@@ -38,7 +40,7 @@ public class SonosController {
 
     @PostMapping("/play")
     public String play(@RequestBody String sound) {
-        System.out.println("Call to sonos play at " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z").format(ZonedDateTime.now()));
+    	log.info("Call to sonos play at " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z").format(ZonedDateTime.now()));
         try {
         	sonos.play(sound);
         } catch (Exception e) {
@@ -50,7 +52,7 @@ public class SonosController {
     
     @PostMapping(value = "/webHook")
     public ResponseEntity<Response> tell(@RequestBody Request request) {
-    	System.out.println(request);
+    	log.info(request.toString());
         String action = request.getAction();
         Response response = new Response();
         switch (action) {
