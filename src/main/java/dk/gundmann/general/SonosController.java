@@ -50,6 +50,7 @@ public class SonosController {
     
     @PostMapping(value = "/webHook")
     public ResponseEntity<Response> tell(@RequestBody Request request) {
+    	System.out.println(request);
         String action = request.getAction();
         Response response = new Response();
         switch (action) {
