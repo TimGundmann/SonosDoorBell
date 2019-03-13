@@ -3,6 +3,8 @@ package dk.gundmann.general;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +16,11 @@ import ca.sukhsingh.actions.on.google.ApiAiApp;
 import ca.sukhsingh.actions.on.google.request.Request;
 import ca.sukhsingh.actions.on.google.response.Response;
 import dk.gundmann.sonos.Sonos;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@Slf4j
 public class SonosController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(SonosController.class);
 	
 	private ApiAiApp app = new ApiAiApp();
     
@@ -29,7 +31,7 @@ public class SonosController {
 
     @PostMapping("/ringbell")
     public String ringbell() {
-        log.info("Call to sonos bell at " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z").format(ZonedDateTime.now()));
+    	logger.info("Call to sonos bell at " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z").format(ZonedDateTime.now()));
         try {
         	sonos.play(BELL_SOUND);
         } catch (Exception e) {
@@ -40,7 +42,7 @@ public class SonosController {
 
     @PostMapping("/play")
     public String play(@RequestBody String sound) {
-    	log.info("Call to sonos play at " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z").format(ZonedDateTime.now()));
+    	logger.info("Call to sonos play at " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z").format(ZonedDateTime.now()));
         try {
         	sonos.play(sound);
         } catch (Exception e) {
@@ -52,7 +54,7 @@ public class SonosController {
     
     @PostMapping(value = "/webHook")
     public ResponseEntity<Response> tell(@RequestBody Request request) {
-    	log.info(request.toString());
+    	logger.info(request.toString());
         String action = request.getAction();
         Response response = new Response();
         switch (action) {
