@@ -1,0 +1,9 @@
+version: '2'
+services:
+  user:
+    network_mode: "host"
+    restart: "always"
+    build: .
+    image: sonos
+    volumes:
+      - /security:/security

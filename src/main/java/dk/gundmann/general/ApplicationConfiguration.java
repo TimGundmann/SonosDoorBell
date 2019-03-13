@@ -18,7 +18,7 @@ import dk.gundmann.bell.sonos.SonosBell;
 @EnableScheduling
 public class ApplicationConfiguration {
 
-	public static final String BELL_SOUND = "cifs://192.168.0.101/netshare/music/Trumpet.mp3";
+	public static final String BELL_SOUND = "cifs://192.168.1.100/music/Trumpet.mp3";
 
 	private Sonos sonos = new Sonos(20000) {
 		@Override
