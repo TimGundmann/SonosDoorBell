@@ -20,59 +20,58 @@ import dk.gundmann.sonos.Sonos;
 
 @RestController
 public class SonosController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(SonosController.class);
-	
+
 	private ApiAiApp app = new ApiAiApp();
-    
+
 	public static final String BELL_SOUND = "cifs://192.168.1.100/music/Trumpet.mp3";
-	
+
 	@Autowired
 	private Sonos sonos;
 
-    @PostMapping("/ringbell")
-    public String ringbell() {
-    	logger.info("Call to sonos bell at " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z").format(ZonedDateTime.now()));
-        try {
-        	sonos.play(BELL_SOUND);
-        } catch (Exception e) {
-        	return e.getMessage();
-        }
-        return "Sonos bell is ringing!";
-    }
+	@PostMapping("/ringbell")
+	public String ringbell() {
+		logger.info("Call to sonos bell at "
+				+ DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z").format(ZonedDateTime.now()));
+		try {
+			sonos.play(BELL_SOUND);
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+		return "Sonos bell is ringing!";
+	}
 
-    @PostMapping("/play")
-    public String play(@RequestBody String sound) {
-    	logger.info("Call to sonos play at " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z").format(ZonedDateTime.now()));
-        try {
-        	sonos.play(sound);
-        } catch (Exception e) {
-        	return e.getMessage();
-        }
-        return "Sonos is playing the sound!";
-    }
+	@PostMapping("/play")
+	public String play(@RequestBody String sound) {
+		logger.info("Call to sonos play at "
+				+ DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss z").format(ZonedDateTime.now()));
+		try {
+			sonos.play(sound);
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+		return "Sonos is playing the sound!";
+	}
 
-    
-    @PostMapping(value = "/webHook")
-    public ResponseEntity<Response> tell(@RequestBody Request request) throws IOException {
-        String action = request.getAction();
-        Response response = new Response();
-        switch (action) {
-            case ("actions.intent.MAIN") :
-                response = app.ask("Hello World!");
-                break;
-            case ("input.ask.rich") :
-                response = app.ask(
-                        app.buildRichResponse()
-                        .addSimpleResponse("Hello World!", "Hello World!")
-                        .addSimpleResponse("Simple response with bubble")
-                        .addSuggestions("Suggestion chip")
-                        .addSuggestions("List", "Carousel")
-                        .addSuggestionLink("Visit me", "http://example.com")
-                );
-                break;
-        }
-        
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+	@PostMapping(value = "/webHook")
+	public ResponseEntity<Response> tell(@RequestBody Request request) throws IOException {
+		Response response = new Response();
+		try {
+			String action = request.getAction();
+			switch (action) {
+			case ("actions.intent.MAIN"):
+				response = app.ask("Hello World!");
+				break;
+			case ("input.ask.rich"):
+				response = app.ask(app.buildRichResponse().addSimpleResponse("Hello World!", "Hello World!")
+						.addSimpleResponse("Simple response with bubble").addSuggestions("Suggestion chip")
+						.addSuggestions("List", "Carousel").addSuggestionLink("Visit me", "http://example.com"));
+				break;
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 }
