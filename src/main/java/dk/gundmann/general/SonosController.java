@@ -1,10 +1,13 @@
 package dk.gundmann.general;
 
+import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,9 @@ public class SonosController {
 	
 	private ApiAiApp app = new ApiAiApp();
     
+	@Autowired
+	private HttpServletRequest context;
+	
 	public static final String BELL_SOUND = "cifs://192.168.1.100/music/Trumpet.mp3";
 	
 	@Autowired
@@ -55,7 +61,8 @@ public class SonosController {
 
     
     @PostMapping(value = "/webHook")
-    public ResponseEntity<Response> tell(@RequestBody Request request) {
+    public ResponseEntity<Response> tell(@RequestBody Request request) throws IOException {
+    	logger.info(context.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
     	logger.info(request.getIntent());
         String action = request.getIntent();
         Response response = new Response();
