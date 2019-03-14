@@ -17,9 +17,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>ca.sukhsingh.actions</groupId>
+			<groupId>com.google.actions</groupId>
 			<artifactId>actions-on-google</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>

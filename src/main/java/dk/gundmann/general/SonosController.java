@@ -3,19 +3,21 @@ package dk.gundmann.general;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import ca.sukhsingh.actions.on.google.ApiAiApp;
-import ca.sukhsingh.actions.on.google.request.Request;
-import ca.sukhsingh.actions.on.google.response.Response;
+import dk.gundmann.actions.SonosApp;
 import dk.gundmann.sonos.Sonos;
 
 @RestController
@@ -23,12 +25,16 @@ public class SonosController {
 
 	private static final Logger logger = LoggerFactory.getLogger(SonosController.class);
 
-	private ApiAiApp app = new ApiAiApp();
-
 	public static final String BELL_SOUND = "cifs://192.168.1.100/music/Trumpet.mp3";
 
-	@Autowired
 	private Sonos sonos;
+
+	private SonosApp sonsoApp;
+
+	public SonosController(SonosApp sonsoApp, Sonos sonos) {
+		this.sonsoApp = sonsoApp;
+		this.sonos = sonos;
+	}
 
 	@PostMapping("/ringbell")
 	public String ringbell() {
@@ -55,23 +61,19 @@ public class SonosController {
 	}
 
 	@PostMapping(value = "/webHook")
-	public ResponseEntity<Response> tell(@RequestBody Request request) throws IOException {
-		Response response = new Response();
-		try {
-			String action = request.getAction();
-			switch (action) {
-			case ("actions.intent.MAIN"):
-				response = app.ask("Hello World!");
-				break;
-			case ("input.ask.rich"):
-				response = app.ask(app.buildRichResponse().addSimpleResponse("Hello World!", "Hello World!")
-						.addSimpleResponse("Simple response with bubble").addSuggestions("Suggestion chip")
-						.addSuggestions("List", "Carousel").addSuggestionLink("Visit me", "http://example.com"));
-				break;
-			}
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+	public String tell(@RequestBody String body, HttpServletRequest request) throws Exception {
+		return sonsoApp.handleRequest(body, getHeadersMap(request)).get();
+	}
+
+	private Map<String, String> getHeadersMap(HttpServletRequest request) {
+		Map<String, String> map = new HashMap<>();
+
+		Enumeration<String> headerNames = request.getHeaderNames();
+		while (headerNames.hasMoreElements()) {
+			String key = (String) headerNames.nextElement();
+			String value = request.getHeader(key);
+			map.put(key, value);
 		}
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return map;
 	}
 }
