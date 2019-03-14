@@ -3,6 +3,8 @@ package dk.gundmann.general;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,11 +56,11 @@ public class SonosController {
     
     @PostMapping(value = "/webHook")
     public ResponseEntity<Response> tell(@RequestBody Request request) {
-    	logger.info(request.toString());
-        String action = request.getAction();
+    	logger.info(request.getIntent());
+        String action = request.getIntent();
         Response response = new Response();
         switch (action) {
-            case ("input.ask") :
+            case ("actions.intent.MAIN") :
                 response = app.ask("Hello World!");
                 break;
             case ("input.ask.rich") :
