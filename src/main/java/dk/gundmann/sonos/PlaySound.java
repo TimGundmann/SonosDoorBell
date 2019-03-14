@@ -82,4 +82,8 @@ public class PlaySound {
 		return ((3600 * hours) + (60 * minutes) + seconds) * 1000 + 500;
 	}
 
+	public void browsAndPlay(ZonePlayer player, BrowsSongParameters parameters) {
+		this.sonos.browse(player, "EN:", "");
+	}
+
 }

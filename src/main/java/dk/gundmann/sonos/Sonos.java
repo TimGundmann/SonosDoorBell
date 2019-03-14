@@ -15,7 +15,13 @@ public class Sonos {
 
 	public void play(String sound) {
 		for (ZonePlayer player : loader.getPlayers()) {
-			new Thread(new ThreadPlayer(player, sound)).start();
+			new Thread(() -> playSound.play(player, sound)).start();
+		}
+	}
+	
+	public void browsAndPlay(BrowsSongParameters parameters) {
+		for (ZonePlayer player : loader.getPlayers()) {
+			new Thread(() -> playSound.browsAndPlay(player, parameters)).start();
 		}
 	}
 	

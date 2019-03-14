@@ -22,13 +22,14 @@ public class SonosApp extends DialogflowApp {
 	public ActionResponse welcome(ActionRequest request) {
 		ResponseBuilder responseBuilder = getResponseBuilder(request);
 	    
-	    if ("klokke".equals(request.getParameter("sonos"))) {
+	    if ("klokke".equals(request.getParameter("sang"))) {
 	    	this.sonos.play(BELL_SOUND);
 	    	responseBuilder.add("Spiller klokke");
 	    } else {
 	    	responseBuilder.add("Ikke implementeret endnu!");
 	    }
 	    
+	    responseBuilder.endConversation();
 	    return responseBuilder.build();
 	}
 
