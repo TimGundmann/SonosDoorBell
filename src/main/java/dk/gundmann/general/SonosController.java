@@ -29,9 +29,6 @@ public class SonosController {
 	
 	private ApiAiApp app = new ApiAiApp();
     
-	@Autowired
-	private HttpServletRequest context;
-	
 	public static final String BELL_SOUND = "cifs://192.168.1.100/music/Trumpet.mp3";
 	
 	@Autowired
@@ -62,7 +59,6 @@ public class SonosController {
     
     @PostMapping(value = "/webHook")
     public ResponseEntity<Response> tell(@RequestBody Request request) throws IOException {
-    	logger.info(context.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
     	logger.info(request.getIntent());
         String action = request.getIntent();
         Response response = new Response();
