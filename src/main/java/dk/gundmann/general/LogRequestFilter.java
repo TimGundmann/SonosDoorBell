@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -27,38 +28,22 @@ import org.springframework.web.util.WebUtils;
 *
 */
 @Component
-public class LogRequestFilter extends OncePerRequestFilter implements Ordered {
+@Order(Ordered.LOWEST_PRECEDENCE - 8)
+public class LogRequestFilter extends OncePerRequestFilter {
 
     private final Log logger = LogFactory.getLog(getClass());
 
-    // put filter at the end of all other filters to make sure we are processing after all others
-    private int order = Ordered.LOWEST_PRECEDENCE - 8;
     private ErrorAttributes errorAttributes;
-
-    @Override
-    public int getOrder() {
-        return order;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws ServletException, IOException {
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
-
-        int status = HttpStatus.INTERNAL_SERVER_ERROR.value();
-
-        // pass through filter chain to do the actual request handling
         filterChain.doFilter(wrappedRequest, response);
-        status = response.getStatus();
+        Map<String, Object> trace = getTrace(wrappedRequest, response.getStatus());
 
-        // only log request if there was an error
-        if (status == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-            Map<String, Object> trace = getTrace(wrappedRequest, status);
-
-            // body can only be read after the actual request handling was done!
-            getBody(wrappedRequest, trace);
-            logTrace(wrappedRequest, trace);
-        }
+        getBody(wrappedRequest, trace);
+        logTrace(wrappedRequest, trace);
     }
 
     private void getBody(ContentCachingRequestWrapper request, Map<String, Object> trace) {
@@ -98,7 +83,7 @@ public class LogRequestFilter extends OncePerRequestFilter implements Ordered {
         Map<String, Object> trace = new LinkedHashMap<String, Object>();
         trace.put("method", request.getMethod());
         trace.put("path", request.getRequestURI());
-        trace.put("principal", principal.getName());
+        trace.put("principal", principal == null ? "none" : principal.getName());
         trace.put("query", request.getQueryString());
         trace.put("statusCode", status);
 

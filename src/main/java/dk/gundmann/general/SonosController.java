@@ -3,11 +3,7 @@ package dk.gundmann.general;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,8 +55,7 @@ public class SonosController {
     
     @PostMapping(value = "/webHook")
     public ResponseEntity<Response> tell(@RequestBody Request request) throws IOException {
-    	logger.info(request.getIntent());
-        String action = request.getIntent();
+        String action = request.getAction();
         Response response = new Response();
         switch (action) {
             case ("actions.intent.MAIN") :
