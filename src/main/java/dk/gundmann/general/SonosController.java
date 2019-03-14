@@ -28,9 +28,9 @@ public class SonosController {
 
 	private SonosApp sonsoApp;
 
-	public SonosController(SonosApp sonsoApp, Sonos sonos) {
-		this.sonsoApp = sonsoApp;
+	public SonosController(Sonos sonos) {
 		this.sonos = sonos;
+		this.sonsoApp = new SonosApp(sonos);
 	}
 
 	@PostMapping("/ringbell")
